@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fundamentos de p5.js · Canvas y p5.js</title>
+  <meta name="description" content="Fundamentos de p5.js: setup, draw, formas, color, interacción y su relación con canvas.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%2317324d'/%3E%3Ccircle cx='32' cy='32' r='14' fill='%23f4a261'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+<header class="encabezado">
+  <div class="barra">
+    <a class="marca" href="index.html">Canvas <span>&amp;</span> p5.js</a>
+    <button class="menu-boton" type="button" aria-expanded="false" aria-controls="menu">☰ Menú</button>
+    <nav aria-label="Principal">
+      <ul class="menu" id="menu">
+        <li><a href="index.html">Inicio</a></li>
+        <li class="grupo">
+          <button class="grupo-boton" type="button" aria-expanded="false" aria-haspopup="true">Teoría <span class="flecha" aria-hidden="true">▾</span></button>
+          <ul class="submenu"><li><a href="canvas.html">La etiqueta &lt;canvas&gt;</a></li><li><a href="p5js.html">Fundamentos de p5.js</a></li></ul>
+        </li>
+        <li class="grupo">
+          <button class="grupo-boton" type="button" aria-expanded="false" aria-haspopup="true">Dibujos <span class="flecha" aria-hidden="true">▾</span></button>
+          <ul class="submenu"><li><a href="rana.html">Rana</a></li><li><a href="dientes-conejo.html">Dientes de conejo</a></li><li><a href="cena.html">¿Qué hay de cena?</a></li><li><a href="dia-nevado.html">Día nevado soleado</a></li><li><a href="muneco-nieve.html">Muñeco de nieve</a></li></ul>
+        </li>
+        <li><a href="dom-inspector.html">DOM</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<main id="contenido">
+
+  <h1>Fundamentos de p5.js</h1>
+  <p class="lead">p5.js es una librería de JavaScript para crear dibujos, animaciones e interacciones con muy poco código. Es la que usamos en los cinco dibujos de este sitio.</p>
+
+  <ul class="indice" aria-label="Contenido de esta página">
+    <li><a href="#que-es">¿Qué es?</a></li>
+    <li><a href="#incluir">Cómo se incluye</a></li>
+    <li><a href="#estructura">setup() y draw()</a></li>
+    <li><a href="#formas">Formas</a></li>
+    <li><a href="#color">Color</a></li>
+    <li><a href="#interaccion">Interacción</a></li>
+    <li><a href="#transformaciones">Transformaciones</a></li>
+    <li><a href="#utiles">Funciones útiles</a></li>
+    <li><a href="#modos">Modo global e instancia</a></li>
+    <li><a href="#canvas">p5.js y canvas</a></li>
+    <li><a href="#aplicado">Aplicado en los dibujos</a></li>
+  </ul>
+
+  <section id="que-es" class="texto">
+    <h2>¿Qué es p5.js?</h2>
+    <p>p5.js es una librería de código abierto para “programación creativa”. Se inspira en Processing, el lenguaje pensado para enseñar programación a través de dibujos, y lo lleva a la web: funciona en cualquier navegador sin instalar nada. Su filosofía es que dibujar con código sea accesible para estudiantes, artistas y principiantes.</p>
+    <p>El simulador de Khan Academy se basa en las mismas ideas de Processing (formas, color, <code>draw</code> repetido), así que los dibujos se adaptan con pocos cambios. Lo que cambia es que ahora escribimos el código en archivos propios y lo ejecutamos en una página web real.</p>
+  </section>
+
+  <section id="incluir" class="texto">
+    <h2>Cómo se incluye en una página</h2>
+    <p>p5.js se carga con una etiqueta <code>&lt;script&gt;</code> antes del código del dibujo. Se puede usar una CDN (como en este sitio) o descargar el archivo <code>p5.min.js</code>:</p>
+<pre><code>&lt;div id="lienzo"&gt;&lt;/div&gt;
+
+&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.4/p5.min.js"&gt;&lt;/script&gt;
+&lt;script src="js/sketches/rana.js"&gt;&lt;/script&gt;</code></pre>
+    <p>El orden importa: primero la librería y después tu código, porque tu código usa funciones que la librería define.</p>
+  </section>
+
+  <section id="estructura" class="texto">
+    <h2>Estructura de un programa: setup() y draw()</h2>
+    <p>Un programa de p5.js (llamado <em>sketch</em>) se organiza alrededor de dos funciones que p5.js llama automáticamente:</p>
+    <ul>
+      <li><code>setup()</code>: se ejecuta <strong>una sola vez</strong> al empezar. Aquí se crea el lienzo con <code>createCanvas(ancho, alto)</code> y se preparan variables.</li>
+      <li><code>draw()</code>: se ejecuta <strong>una y otra vez</strong>, normalmente unas 60 veces por segundo (puede cambiarse con <code>frameRate()</code>). Cada ejecución es un <em>cuadro</em> de la animación.</li>
+    </ul>
+<pre><code>let x = 0;
+
+function setup() {
+  createCanvas(400, 400);      // se ejecuta una vez
+}
+
+function draw() {
+  background(220);             // borra el cuadro anterior
+  circle(x, 200, 50);          // dibuja
+  x = x + 2;                   // cambia el estado para el próximo cuadro
+}</code></pre>
+    <p>La variable <code>frameCount</code> cuenta los cuadros dibujados desde el inicio y es muy útil para animaciones basadas en tiempo. Para que el dibujo no se repita, se puede usar <code>noLoop()</code>.</p>
+    <p class="nota">Las coordenadas funcionan igual que en canvas: origen arriba a la izquierda, <code>y</code> crece hacia abajo. Por defecto los ángulos están en radianes (<code>angleMode(DEGREES)</code> los cambia a grados).</p>
+  </section>
+
+  <section id="formas" class="texto">
+    <h2>Dibujar formas</h2>
+    <table>
+      <thead><tr><th>Función</th><th>Dibuja</th></tr></thead>
+      <tbody>
+        <tr><td><code>point(x, y)</code>, <code>line(x1, y1, x2, y2)</code></td><td>Puntos y líneas.</td></tr>
+        <tr><td><code>rect(x, y, ancho, alto)</code></td><td>Rectángulo; con más parámetros, esquinas redondeadas.</td></tr>
+        <tr><td><code>ellipse(x, y, ancho, alto)</code>, <code>circle(x, y, diámetro)</code></td><td>Elipses y círculos, con el centro en <code>(x, y)</code>.</td></tr>
+        <tr><td><code>triangle(x1, y1, x2, y2, x3, y3)</code>, <code>quad()</code></td><td>Triángulos y cuadriláteros.</td></tr>
+        <tr><td><code>arc(x, y, w, h, inicio, fin, modo)</code></td><td>Arcos, con los modos <code>OPEN</code>, <code>CHORD</code> y <code>PIE</code>.</td></tr>
+        <tr><td><code>beginShape()</code>, <code>vertex()</code>, <code>endShape()</code></td><td>Formas libres punto por punto.</td></tr>
+        <tr><td><code>text(texto, x, y)</code></td><td>Texto (con <code>textSize()</code> y <code>textAlign()</code>).</td></tr>
+      </tbody>
+    </table>
+    <p>Un detalle importante: <code>rect()</code> coloca su esquina superior izquierda en <code>(x, y)</code>, mientras que <code>ellipse()</code> coloca su <strong>centro</strong> en <code>(x, y)</code>.</p>
+  </section>
+
+  <section id="color" class="texto">
+    <h2>Color y estilo</h2>
+    <p>p5.js recuerda el estilo actual y lo aplica a todo lo que se dibuje después:</p>
+<pre><code>background(135, 206, 235);     // fondo con RGB (rojo, verde, azul: de 0 a 255)
+fill(255, 200, 0);             // relleno amarillo
+stroke(0);                     // contorno negro (un solo número = gris)
+strokeWeight(3);               // grosor del contorno
+circle(200, 200, 100);
+
+noStroke();                    // sin contorno
+fill(255, 0, 0, 120);          // el 4.º número es la transparencia (alfa)
+rect(150, 150, 100, 100);</code></pre>
+    <ul>
+      <li><code>noFill()</code> y <code>noStroke()</code> desactivan relleno y contorno.</li>
+      <li><code>colorMode(HSB)</code> cambia a tono, saturación y brillo.</li>
+      <li><code>lerpColor(c1, c2, t)</code> mezcla dos colores: es la base de los degradados del dibujo del día nevado.</li>
+    </ul>
+  </section>
+
+  <section id="interaccion" class="texto">
+    <h2>Interacción: mouse y teclado</h2>
+    <p><strong>Variables del sistema</strong> que p5.js actualiza solas: <code>mouseX</code>, <code>mouseY</code> (posición actual), <code>pmouseX</code>, <code>pmouseY</code> (posición en el cuadro anterior), <code>mouseIsPressed</code>, <code>key</code>, <code>keyIsPressed</code>, <code>width</code>, <code>height</code> y <code>frameCount</code>.</p>
+    <p><strong>Funciones de evento</strong> que p5.js llama cuando ocurre algo: <code>mousePressed()</code>, <code>mouseReleased()</code>, <code>mouseMoved()</code>, <code>mouseDragged()</code>, <code>keyPressed()</code>.</p>
+<pre><code>function mousePressed() {
+  // se ejecuta una vez cada vez que se hace clic
+  conSombrero = !conSombrero;
+}
+
+function keyPressed() {
+  if (key === '1') bufanda = [220, 50, 60];   // tecla "1"
+}</code></pre>
+    <p class="nota">Estas funciones se activan con eventos de <em>toda</em> la página, no solo del lienzo. Por eso en los dibujos se comprueba que el mouse esté dentro del lienzo antes de reaccionar.</p>
+  </section>
+
+  <section id="transformaciones" class="texto">
+    <h2>Transformaciones: translate, rotate, scale, push y pop</h2>
+    <p><code>translate(x, y)</code> mueve el origen, <code>rotate(ángulo)</code> gira el sistema de coordenadas y <code>scale(s)</code> lo agranda o reduce. Se acumulan, así que se encierran entre <code>push()</code> (guarda el estado) y <code>pop()</code> (lo recupera). Es lo mismo que <code>save()</code> y <code>restore()</code> del canvas nativo.</p>
+<pre><code>push();
+translate(200, 200);        // el origen pasa al centro
+rotate(frameCount * 0.02);  // gira un poco más en cada cuadro
+rect(-40, -10, 80, 20);     // una barra centrada en el origen
+pop();</code></pre>
+  </section>
+
+  <section id="utiles" class="texto">
+    <h2>Funciones matemáticas útiles</h2>
+    <table>
+      <thead><tr><th>Función</th><th>Para qué sirve</th></tr></thead>
+      <tbody>
+        <tr><td><code>random(a, b)</code></td><td>Número al azar entre <code>a</code> y <code>b</code>.</td></tr>
+        <tr><td><code>noise(x)</code></td><td>Aleatoriedad suave (cambia gradualmente): ideal para movimientos naturales, como la mosca.</td></tr>
+        <tr><td><code>map(v, a1, b1, a2, b2)</code></td><td>Convierte un valor de un rango a otro (por ejemplo, la posición del mouse a un color).</td></tr>
+        <tr><td><code>lerp(a, b, t)</code></td><td>Punto intermedio entre <code>a</code> y <code>b</code> (<code>t</code> de 0 a 1); sirve para suavizar movimientos.</td></tr>
+        <tr><td><code>constrain(v, min, max)</code></td><td>Limita un valor a un intervalo.</td></tr>
+        <tr><td><code>dist(x1, y1, x2, y2)</code></td><td>Distancia entre dos puntos.</td></tr>
+        <tr><td><code>sin()</code>, <code>cos()</code>, <code>atan2()</code></td><td>Oscilaciones, órbitas y ángulos hacia un punto.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="modos" class="texto">
+    <h2>Modo global y modo instancia</h2>
+    <p>En el <strong>modo global</strong>, el que usamos aquí, las funciones de p5.js (<code>circle</code>, <code>fill</code>…) y las variables (<code>mouseX</code>…) están disponibles directamente. Es lo más sencillo para empezar, pero solo admite un sketch por página y llena el espacio global de nombres.</p>
+    <p>En el <strong>modo instancia</strong> se crea un objeto <code>p5</code> y todo se llama a través de él, lo que permite varios sketches en una misma página:</p>
+<pre><code>const mi = new p5((p) =&gt; {
+  p.setup = () =&gt; p.createCanvas(200, 200);
+  p.draw = () =&gt; {
+    p.background(240);
+    p.circle(p.mouseX, p.mouseY, 40);
+  };
+}, document.getElementById('lienzo'));</code></pre>
+  </section>
+
+  <section id="canvas" class="texto">
+    <h2>Cómo se relaciona p5.js con &lt;canvas&gt;</h2>
+    <p><code>createCanvas()</code> inserta un elemento <code>&lt;canvas&gt;</code> en la página, y p5.js dibuja en su contexto 2D con los métodos que vimos en la <a href="canvas.html">página sobre canvas</a>: las formas se pintan con métodos del contexto 2D (como <code>arc()</code> o <code>ellipse()</code> y <code>fill()</code>), y <code>push()</code> / <code>pop()</code> cumplen un papel parecido a <code>save()</code> / <code>restore()</code>. El contexto nativo está disponible en la variable <code>drawingContext</code>, por si quieres usar algo que p5.js no ofrece (como un degradado):</p>
+<pre><code>function setup() {
+  createCanvas(300, 200);
+  const g = drawingContext.createLinearGradient(0, 0, 300, 0);
+  g.addColorStop(0, 'orange');
+  g.addColorStop(1, 'purple');
+  drawingContext.fillStyle = g;
+  rect(0, 0, 300, 200);
+}</code></pre>
+    <p>Con <code>createCanvas(ancho, alto, WEBGL)</code> p5.js usa el contexto WebGL en lugar del 2D para dibujar en 3D. Además, <code>.parent('lienzo')</code> permite colocar el lienzo dentro de un elemento concreto de la página, como se hace en todos los dibujos de este sitio.</p>
+  </section>
+
+  <section id="demo">
+    <h2>Pruébalo: un sketch mínimo en vivo</h2>
+    <div class="demo">
+      <div class="lienzo-marco"><div id="lienzo" role="img" aria-label="Lienzo con círculos de colores que siguen al mouse y dejan una estela"></div></div>
+      <p class="texto" style="max-width:34ch;margin:0">Mueve el mouse sobre el lienzo. Usa <code>background()</code> con transparencia para la estela, <code>dist()</code> con <code>pmouseX</code> para la velocidad, <code>map()</code> para el color y <code>circle()</code>.</p>
+    </div>
+  </section>
+
+  <section id="aplicado">
+    <h2>Dónde se aplica cada idea en los dibujos</h2>
+    <table>
+      <thead><tr><th>Dibujo</th><th>Ideas principales de p5.js</th></tr></thead>
+      <tbody>
+        <tr><td><a href="rana.html">Rana</a></td><td>Formas básicas, <code>atan2()</code> y <code>dist()</code>, <code>sin()</code>, <code>lerp()</code>, <code>noise()</code>, eventos de mouse y teclado.</td></tr>
+        <tr><td><a href="dientes-conejo.html">Dientes de conejo</a></td><td><code>push()</code> / <code>pop()</code> con <code>rotate()</code>, <code>map()</code>, arreglo de partículas.</td></tr>
+        <tr><td><a href="cena.html">¿Qué hay de cena?</a></td><td>Funciones propias, arreglos, <code>random()</code>, bucles <code>for</code>, <code>beginShape()</code>, temporizador por fotogramas.</td></tr>
+        <tr><td><a href="dia-nevado.html">Día nevado soleado</a></td><td><code>lerpColor()</code>, <code>lerp()</code>, arreglos de objetos, <code>translate()</code> / <code>rotate()</code> / <code>scale()</code>, <code>mouseIsPressed</code>.</td></tr>
+        <tr><td><a href="muneco-nieve.html">Muñeco de nieve</a></td><td>Variables booleanas, <code>constrain()</code>, <code>keyPressed()</code>, brazos articulados con <code>rotate()</code>.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <details class="codigo">
+    <summary>Ver el código del sketch de ejemplo (js/sketches/demo-p5.js)</summary>
+    <pre><code id="codigo-fuente" data-src="js/sketches/demo-p5.js">Cargando código…</code></pre>
+  </details>
+
+</main>
+<footer class="pie">
+  <p>Proyecto escolar: de Khan Academy a código web nativo · HTML, CSS, JavaScript y <a href="https://p5js.org/" target="_blank" rel="noopener">p5.js</a></p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.4/p5.min.js"></script>
+<script>window.p5 || document.write('<script src="https://cdn.jsdelivr.net/npm/p5@1.9.4/lib/p5.min.js"><\/script>')</script>
+<script src="js/sketches/demo-p5.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

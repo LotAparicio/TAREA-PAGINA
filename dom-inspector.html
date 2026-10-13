@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inspector del DOM · Canvas y p5.js</title>
+  <meta name="description" content="Árbol del DOM de cada página del sitio, dibujado de forma gráfica e interactiva.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%2317324d'/%3E%3Ccircle cx='32' cy='32' r='14' fill='%23f4a261'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+<header class="encabezado">
+  <div class="barra">
+    <a class="marca" href="index.html">Canvas <span>&amp;</span> p5.js</a>
+    <button class="menu-boton" type="button" aria-expanded="false" aria-controls="menu">☰ Menú</button>
+    <nav aria-label="Principal">
+      <ul class="menu" id="menu">
+        <li><a href="index.html">Inicio</a></li>
+        <li class="grupo">
+          <button class="grupo-boton" type="button" aria-expanded="false" aria-haspopup="true">Teoría <span class="flecha" aria-hidden="true">▾</span></button>
+          <ul class="submenu"><li><a href="canvas.html">La etiqueta &lt;canvas&gt;</a></li><li><a href="p5js.html">Fundamentos de p5.js</a></li></ul>
+        </li>
+        <li class="grupo">
+          <button class="grupo-boton" type="button" aria-expanded="false" aria-haspopup="true">Dibujos <span class="flecha" aria-hidden="true">▾</span></button>
+          <ul class="submenu"><li><a href="rana.html">Rana</a></li><li><a href="dientes-conejo.html">Dientes de conejo</a></li><li><a href="cena.html">¿Qué hay de cena?</a></li><li><a href="dia-nevado.html">Día nevado soleado</a></li><li><a href="muneco-nieve.html">Muñeco de nieve</a></li></ul>
+        </li>
+        <li><a href="dom-inspector.html">DOM</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<main id="contenido">
+
+  <h1>Inspector del DOM</h1>
+  <p class="lead">El DOM (Document Object Model) es el árbol de elementos que el navegador construye a partir del HTML. Aquí puedes ver, de forma gráfica, el árbol de cada página de este sitio: desde la raíz <code>&lt;html&gt;</code>, pasando por <code>&lt;head&gt;</code> y <code>&lt;body&gt;</code>, los contenedores semánticos como <code>&lt;header&gt;</code> y <code>&lt;main&gt;</code>, hasta los elementos hijos como <code>&lt;h1&gt;</code>, <code>&lt;p&gt;</code> o <code>&lt;canvas&gt;</code>.</p>
+
+  <div class="pestanas" id="selector" role="group" aria-label="Elige una página"></div>
+
+  <div class="herramientas">
+    <button class="mini" id="expandir" type="button">Expandir todo</button>
+    <button class="mini" id="colapsar" type="button">Contraer todo</button>
+    <select id="orientacion" aria-label="Orientación del árbol"><option value="horizontal">Vista horizontal (→)</option><option value="vertical">Vista vertical (↓)</option></select>
+    <select id="tema" aria-label="Tema de color"><option value="claro">Tema claro</option><option value="oscuro">Tema oscuro</option></select>
+    <select id="nivel" aria-label="Limitar niveles"><option value="0">Mostrar todos los niveles</option></select>
+    <label><input type="checkbox" id="opt-attr" checked> Atributos</label>
+    <label><input type="checkbox" id="opt-texto"> Texto de los elementos</label>
+  </div>
+
+  <p id="resumen" aria-live="polite"></p>
+  <div class="leyenda" id="leyenda" aria-label="Leyenda de colores"></div>
+
+  <div class="arbol-contenedor" tabindex="0" aria-label="Árbol del DOM">
+    <div id="arbol"></div>
+  </div>
+
+  <section class="texto">
+    <h2>Cómo leerlo</h2>
+    <ul>
+      <li>Cada caja es un elemento (etiqueta). El texto después de <code>#</code> es su <code>id</code> y después de <code>.</code> sus clases.</li>
+      <li>La línea que sale hacia la derecha lleva a sus <strong>hijos</strong>; el número dentro de la caja indica cuántos tiene.</li>
+      <li>Haz clic en una caja con hijos para contraer o expandir esa rama (queda con un borde naranja cuando está contraída).</li>
+      <li>Los <code>&lt;canvas&gt;</code> de los dibujos aparecen porque p5.js los crea con JavaScript al cargar la página: el inspector lee el DOM ya construido, no solo el archivo HTML.</li>
+    </ul>
+    <p class="nota">Este inspector carga cada página en segundo plano, así que funciona desde GitHub Pages o un servidor local, pero no abriendo el archivo con doble clic.</p>
+  </section>
+
+</main>
+<footer class="pie">
+  <p>Proyecto escolar: de Khan Academy a código web nativo · HTML, CSS, JavaScript y <a href="https://p5js.org/" target="_blank" rel="noopener">p5.js</a></p>
+</footer>
+<script src="js/dom-inspector.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

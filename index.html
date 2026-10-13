@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inicio · Canvas y p5.js</title>
+  <meta name="description" content="Cinco dibujos interactivos hechos con p5.js, con teoría sobre canvas y p5.js.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%2317324d'/%3E%3Ccircle cx='32' cy='32' r='14' fill='%23f4a261'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+<header class="encabezado">
+  <div class="barra">
+    <a class="marca" href="index.html">Canvas <span>&amp;</span> p5.js</a>
+    <button class="menu-boton" type="button" aria-expanded="false" aria-controls="menu">☰ Menú</button>
+    <nav aria-label="Principal">
+      <ul class="menu" id="menu">
+        <li><a href="index.html">Inicio</a></li>
+        <li class="grupo">
+          <button class="grupo-boton" type="button" aria-expanded="false" aria-haspopup="true">Teoría <span class="flecha" aria-hidden="true">▾</span></button>
+          <ul class="submenu"><li><a href="canvas.html">La etiqueta &lt;canvas&gt;</a></li><li><a href="p5js.html">Fundamentos de p5.js</a></li></ul>
+        </li>
+        <li class="grupo">
+          <button class="grupo-boton" type="button" aria-expanded="false" aria-haspopup="true">Dibujos <span class="flecha" aria-hidden="true">▾</span></button>
+          <ul class="submenu"><li><a href="rana.html">Rana</a></li><li><a href="dientes-conejo.html">Dientes de conejo</a></li><li><a href="cena.html">¿Qué hay de cena?</a></li><li><a href="dia-nevado.html">Día nevado soleado</a></li><li><a href="muneco-nieve.html">Muñeco de nieve</a></li></ul>
+        </li>
+        <li><a href="dom-inspector.html">DOM</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<main id="contenido">
+
+  <section class="hero">
+    <h1>De Khan Academy al código web real</h1>
+    <p>Cinco dibujos interactivos creados con p5.js y adaptados a una página web hecha con HTML, CSS y JavaScript. Explora cada uno y consulta la teoría que los hace posibles.</p>
+    <a class="boton" href="#dibujos">Ver los dibujos</a>
+    <a class="boton secundario" href="canvas.html">Leer la teoría</a>
+  </section>
+
+  <section id="dibujos" aria-labelledby="t-dibujos">
+    <h2 id="t-dibujos" style="margin-top:0">Los cinco dibujos</h2>
+    <p class="lead">Cada dibujo corre en vivo en su propia página y responde al mouse o al teclado. Debajo de cada uno puedes leer su código completo.</p>
+    <div class="rejilla">
+      <a class="proyecto" href="rana.html">
+        <span class="num" aria-hidden="true">1</span>
+        <h3>Rana</h3>
+        <p>Una rana en su nenúfar que atrapa moscas con la lengua.</p>
+        <span class="ir">Ver dibujo →</span>
+      </a>
+      <a class="proyecto" href="dientes-conejo.html">
+        <span class="num" aria-hidden="true">2</span>
+        <h3>Dientes de conejo</h3>
+        <p>Un conejo de dientes grandes que muerde una zanahoria.</p>
+        <span class="ir">Ver dibujo →</span>
+      </a>
+      <a class="proyecto" href="cena.html">
+        <span class="num" aria-hidden="true">3</span>
+        <h3>¿Qué hay de cena?</h3>
+        <p>Un plato que “baraja” cuatro platillos y elige uno al azar.</p>
+        <span class="ir">Ver dibujo →</span>
+      </a>
+      <a class="proyecto" href="dia-nevado.html">
+        <span class="num" aria-hidden="true">4</span>
+        <h3>Día nevado soleado</h3>
+        <p>Un paisaje con nieve cayendo, pinos y un sol que recorre el cielo.</p>
+        <span class="ir">Ver dibujo →</span>
+      </a>
+      <a class="proyecto" href="muneco-nieve.html">
+        <span class="num" aria-hidden="true">5</span>
+        <h3>Muñeco de nieve</h3>
+        <p>Un muñeco que te mira, te saluda y cambia de sombrero y bufanda.</p>
+        <span class="ir">Ver dibujo →</span>
+      </a>
+    </div>
+  </section>
+
+  <section aria-labelledby="t-teoria">
+    <h2 id="t-teoria">Teoría</h2>
+    <div class="dos-columnas">
+      <article class="tarjeta">
+        <h3 style="margin-top:0">La etiqueta &lt;canvas&gt;</h3>
+        <p>Qué es el elemento <code>&lt;canvas&gt;</code>, cómo se obtiene su contexto de renderizado 2D, cómo funcionan las coordenadas, las formas, las transformaciones y las animaciones, con demos en vivo.</p>
+        <a class="boton oscuro" href="canvas.html">Leer sobre canvas</a>
+      </article>
+      <article class="tarjeta">
+        <h3 style="margin-top:0">Fundamentos de p5.js</h3>
+        <p>Cómo funcionan <code>setup()</code> y <code>draw()</code>, las formas, el color, la interacción, las transformaciones y cómo p5.js se apoya en <code>&lt;canvas&gt;</code> por debajo.</p>
+        <a class="boton oscuro" href="p5js.html">Leer sobre p5.js</a>
+      </article>
+    </div>
+  </section>
+</main>
+<footer class="pie">
+  <p>Proyecto escolar: de Khan Academy a código web nativo · HTML, CSS, JavaScript y <a href="https://p5js.org/" target="_blank" rel="noopener">p5.js</a></p>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

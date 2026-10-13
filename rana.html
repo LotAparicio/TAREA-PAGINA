@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rana · Canvas y p5.js</title>
+  <meta name="description" content="Una rana sobre un nenúfar con ojos que siguen al cursor. Lanza la lengua para atrapar moscas y puede dar saltos.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%2317324d'/%3E%3Ccircle cx='32' cy='32' r='14' fill='%23f4a261'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+<header class="encabezado">
+  <div class="barra">
+    <a class="marca" href="index.html">Canvas <span>&amp;</span> p5.js</a>
+    <button class="menu-boton" type="button" aria-expanded="false" aria-controls="menu">☰ Menú</button>
+    <nav aria-label="Principal">
+      <ul class="menu" id="menu">
+        <li><a href="index.html">Inicio</a></li>
+        <li class="grupo">
+          <button class="grupo-boton" type="button" aria-expanded="false" aria-haspopup="true">Teoría <span class="flecha" aria-hidden="true">▾</span></button>
+          <ul class="submenu"><li><a href="canvas.html">La etiqueta &lt;canvas&gt;</a></li><li><a href="p5js.html">Fundamentos de p5.js</a></li></ul>
+        </li>
+        <li class="grupo">
+          <button class="grupo-boton" type="button" aria-expanded="false" aria-haspopup="true">Dibujos <span class="flecha" aria-hidden="true">▾</span></button>
+          <ul class="submenu"><li><a href="rana.html">Rana</a></li><li><a href="dientes-conejo.html">Dientes de conejo</a></li><li><a href="cena.html">¿Qué hay de cena?</a></li><li><a href="dia-nevado.html">Día nevado soleado</a></li><li><a href="muneco-nieve.html">Muñeco de nieve</a></li></ul>
+        </li>
+        <li><a href="dom-inspector.html">DOM</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<main id="contenido">
+
+  <p><a href="index.html#dibujos">← Todos los dibujos</a></p>
+  <h1>Rana</h1>
+  <p class="lead">Una rana sobre un nenúfar con ojos que siguen al cursor. Lanza la lengua para atrapar moscas y puede dar saltos.</p>
+
+  <div class="escenario">
+    <div>
+      <div class="lienzo-marco">
+        <div id="lienzo" role="img" aria-label="Rana verde sobre un nenúfar en un estanque; una mosca vuela cerca."></div>
+      </div>
+      <div class="controles">
+        <button class="boton oscuro" id="guardar" data-nombre="rana" type="button">Guardar imagen (PNG)</button>
+      </div>
+    </div>
+    <div>
+      <section class="tarjeta ayuda" aria-labelledby="t-uso">
+        <h2 id="t-uso" style="margin-top:0">Cómo interactuar</h2>
+        <ul><li><strong>Clic</strong> dentro del lienzo: la rana lanza la lengua hacia el cursor.</li><li><kbd>Espacio</kbd>: la rana salta.</li><li>Mueve el mouse: las pupilas la siguen.</li><li>Cada mosca atrapada suma un punto al marcador.</li></ul>
+      </section>
+      <section class="tarjeta ayuda" style="margin-top:18px" aria-labelledby="t-conceptos">
+        <h2 id="t-conceptos" style="margin-top:0">Conceptos de p5.js que se usan</h2>
+        <ul><li><code>ellipse()</code>, <code>arc()</code>, <code>fill()</code> y <code>noStroke()</code> para construir la rana con formas simples.</li><li><code>atan2()</code> y <code>dist()</code> para que las pupilas apunten al mouse.</li><li><code>sin()</code> para dar forma de arco al salto, y <code>lerp()</code> para estirar la lengua.</li><li><code>noise()</code> para que la mosca vuele de forma natural.</li><li><code>mousePressed()</code> y <code>keyPressed()</code> para reaccionar a eventos.</li><li>Variables de estado (<code>saltoT</code>, <code>lenguaT</code>) que controlan cada animación.</li></ul>
+      </section>
+    </div>
+  </div>
+
+  <details class="codigo">
+    <summary>Ver el código completo (js/sketches/rana.js)</summary>
+    <pre><code id="codigo-fuente" data-src="js/sketches/rana.js">Cargando código…</code></pre>
+  </details>
+
+  <nav class="anterior-siguiente" aria-label="Otros dibujos"><span></span><a class="boton oscuro" href="dientes-conejo.html">Dientes de conejo →</a></nav>
+</main>
+<footer class="pie">
+  <p>Proyecto escolar: de Khan Academy a código web nativo · HTML, CSS, JavaScript y <a href="https://p5js.org/" target="_blank" rel="noopener">p5.js</a></p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.4/p5.min.js"></script>
+<script>window.p5 || document.write('<script src="https://cdn.jsdelivr.net/npm/p5@1.9.4/lib/p5.min.js"><\/script>')</script>
+<script src="js/sketches/rana.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>La etiqueta canvas · Canvas y p5.js</title>
+  <meta name="description" content="Qué es el elemento canvas de HTML5, sus contextos de renderizado 2D y cómo dibujar y animar con él.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%2317324d'/%3E%3Ccircle cx='32' cy='32' r='14' fill='%23f4a261'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+<header class="encabezado">
+  <div class="barra">
+    <a class="marca" href="index.html">Canvas <span>&amp;</span> p5.js</a>
+    <button class="menu-boton" type="button" aria-expanded="false" aria-controls="menu">☰ Menú</button>
+    <nav aria-label="Principal">
+      <ul class="menu" id="menu">
+        <li><a href="index.html">Inicio</a></li>
+        <li class="grupo">
+          <button class="grupo-boton" type="button" aria-expanded="false" aria-haspopup="true">Teoría <span class="flecha" aria-hidden="true">▾</span></button>
+          <ul class="submenu"><li><a href="canvas.html">La etiqueta &lt;canvas&gt;</a></li><li><a href="p5js.html">Fundamentos de p5.js</a></li></ul>
+        </li>
+        <li class="grupo">
+          <button class="grupo-boton" type="button" aria-expanded="false" aria-haspopup="true">Dibujos <span class="flecha" aria-hidden="true">▾</span></button>
+          <ul class="submenu"><li><a href="rana.html">Rana</a></li><li><a href="dientes-conejo.html">Dientes de conejo</a></li><li><a href="cena.html">¿Qué hay de cena?</a></li><li><a href="dia-nevado.html">Día nevado soleado</a></li><li><a href="muneco-nieve.html">Muñeco de nieve</a></li></ul>
+        </li>
+        <li><a href="dom-inspector.html">DOM</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<main id="contenido">
+
+  <h1>La etiqueta &lt;canvas&gt;</h1>
+  <p class="lead">El elemento <code>&lt;canvas&gt;</code> es una superficie rectangular de píxeles dentro de la página sobre la que se dibuja con JavaScript. Es la base sobre la que p5.js crea sus dibujos.</p>
+
+  <ul class="indice" aria-label="Contenido de esta página">
+    <li><a href="#que-es">¿Qué es?</a></li>
+    <li><a href="#uso">Cómo se usa</a></li>
+    <li><a href="#contextos">Contextos de renderizado</a></li>
+    <li><a href="#coordenadas">Coordenadas</a></li>
+    <li><a href="#formas">Formas y trazados</a></li>
+    <li><a href="#estilos">Estilos</a></li>
+    <li><a href="#texto">Texto</a></li>
+    <li><a href="#transformaciones">Transformaciones</a></li>
+    <li><a href="#animacion">Animación</a></li>
+    <li><a href="#eventos">Eventos</a></li>
+    <li><a href="#practicas">Buenas prácticas</a></li>
+    <li><a href="#equivalencias">Canvas y p5.js</a></li>
+  </ul>
+
+  <section id="que-es" class="texto">
+    <h2>¿Qué es &lt;canvas&gt;?</h2>
+    <p>Un <code>&lt;canvas&gt;</code> (“lienzo”) es una etiqueta de HTML5 que reserva un área de la página. Por sí sola no muestra nada: es un lienzo en blanco transparente. Para dibujar hay que pedirle a JavaScript un <strong>contexto de renderizado</strong>, que es el objeto con los “pinceles” (métodos y propiedades) para pintar sobre él.</p>
+    <p>Un canvas es un <strong>mapa de bits</strong> (una cuadrícula de píxeles). Eso significa que, una vez pintado, el navegador no recuerda “aquí hay un círculo”: solo recuerda los colores de los píxeles. Si quieres mover el círculo, debes borrar y volver a dibujar. Esto contrasta con SVG, donde cada forma sigue siendo un objeto del documento.</p>
+  </section>
+
+  <section id="uso" class="texto">
+    <h2>Cómo se usa</h2>
+    <p>Se necesitan tres pasos: poner la etiqueta, obtener el contexto y llamar a los métodos de dibujo.</p>
+<pre><code>&lt;canvas id="lienzo" width="400" height="300"&gt;
+  Tu navegador no admite canvas.
+&lt;/canvas&gt;
+
+&lt;script&gt;
+  const canvas = document.getElementById('lienzo');
+  const ctx = canvas.getContext('2d');   // contexto de renderizado 2D
+
+  ctx.fillStyle = 'tomato';
+  ctx.fillRect(50, 40, 120, 80);         // x, y, ancho, alto
+&lt;/script&gt;</code></pre>
+    <ul>
+      <li><strong>Atributos <code>width</code> y <code>height</code>:</strong> definen la resolución real del mapa de bits (si no se escriben, el canvas mide 300 × 150 píxeles). Si se cambia el tamaño solo con CSS, el dibujo se estira o se deforma, porque CSS escala la imagen, no la resolución.</li>
+      <li><strong>Contenido entre las etiquetas:</strong> es el contenido alternativo. Se muestra solo si el navegador no soporta canvas y, junto con <code>role="img"</code> y <code>aria-label</code>, ayuda a la accesibilidad.</li>
+      <li><strong><code>getContext()</code>:</strong> devuelve el contexto del tipo pedido. Un canvas solo puede tener un tipo de contexto: después de pedir <code>'2d'</code>, pedir <code>'webgl'</code> sobre el mismo canvas devuelve <code>null</code>.</li>
+    </ul>
+  </section>
+
+  <section id="contextos" class="texto">
+    <h2>Contextos de renderizado</h2>
+    <p>El argumento de <code>getContext()</code> decide con qué “motor” se dibuja:</p>
+    <table>
+      <thead><tr><th>Contexto</th><th>Llamada</th><th>Para qué sirve</th></tr></thead>
+      <tbody>
+        <tr><td><strong>2D</strong></td><td><code>getContext('2d')</code></td><td>Gráficos bidimensionales: rectángulos, trazados, curvas, texto, imágenes y manipulación de píxeles. Devuelve un objeto <code>CanvasRenderingContext2D</code>. Es el que usamos en este sitio.</td></tr>
+        <tr><td><strong>WebGL</strong></td><td><code>getContext('webgl')</code> o <code>'webgl2'</code></td><td>Gráficos 3D (y 2D de alto rendimiento) acelerados por la tarjeta gráfica, basados en OpenGL ES. Más potente y más complejo.</td></tr>
+        <tr><td><strong>Bitmap</strong></td><td><code>getContext('bitmaprenderer')</code></td><td>Mostrar de forma eficiente un <code>ImageBitmap</code> ya creado, sin dibujar con métodos.</td></tr>
+        <tr><td><strong>WebGPU</strong></td><td><code>getContext('webgpu')</code></td><td>API más reciente para la GPU, disponible en navegadores modernos.</td></tr>
+      </tbody>
+    </table>
+    <h3>El contexto 2D</h3>
+    <p>El contexto 2D es de <strong>modo inmediato</strong>: cada llamada pinta al instante sobre el mapa de bits. Combina dos cosas:</p>
+    <ul>
+      <li><strong>Métodos</strong> que dibujan o cambian el estado (<code>fillRect()</code>, <code>arc()</code>, <code>translate()</code>…).</li>
+      <li><strong>Propiedades de estado</strong> que afectan a lo que se dibuja <em>después</em> (<code>fillStyle</code>, <code>lineWidth</code>, <code>font</code>…).</li>
+    </ul>
+    <p>Al obtener el contexto se pueden pasar opciones, por ejemplo <code>canvas.getContext('2d', { alpha: false })</code> para indicar que el fondo siempre será opaco.</p>
+  </section>
+
+  <section id="coordenadas" class="texto">
+    <h2>Sistema de coordenadas</h2>
+    <p>El origen <code>(0, 0)</code> está en la <strong>esquina superior izquierda</strong>. La <code>x</code> crece hacia la derecha y la <code>y</code> crece <strong>hacia abajo</strong> (al revés que en matemáticas). Los ángulos se miden en <strong>radianes</strong>: <code>0</code> apunta hacia la derecha y los valores positivos giran en el sentido de las manecillas del reloj. Una vuelta completa es <code>Math.PI * 2</code>.</p>
+  </section>
+
+  <section id="formas" class="texto">
+    <h2>Formas y trazados</h2>
+    <h3>Rectángulos</h3>
+    <p>Son las únicas formas que se dibujan con una sola llamada: <code>fillRect(x, y, ancho, alto)</code> (relleno), <code>strokeRect()</code> (solo borde) y <code>clearRect()</code> (borra un área dejándola transparente).</p>
+    <h3>Trazados (paths)</h3>
+    <p>Todo lo demás se construye describiendo un camino y después pintándolo:</p>
+<pre><code>ctx.beginPath();            // empieza un trazado nuevo
+ctx.moveTo(100, 20);        // coloca el "lápiz" sin dibujar
+ctx.lineTo(160, 120);       // línea recta
+ctx.lineTo(40, 120);
+ctx.closePath();            // cierra volviendo al inicio
+ctx.fill();                 // rellena el trazado
+ctx.stroke();               // dibuja su contorno
+
+ctx.beginPath();
+ctx.arc(250, 70, 40, 0, Math.PI * 2);   // x, y, radio, ángulo inicial, ángulo final
+ctx.fill();</code></pre>
+    <p>Otros métodos de trazado: <code>rect()</code>, <code>ellipse()</code>, <code>quadraticCurveTo()</code>, <code>bezierCurveTo()</code> y <code>clip()</code>. Olvidar <code>beginPath()</code> es un error muy común: los trazados anteriores se vuelven a pintar junto con los nuevos.</p>
+    <h3>Imágenes y píxeles</h3>
+    <p><code>drawImage()</code> dibuja una imagen o incluso otro canvas, y <code>getImageData()</code> / <code>putImageData()</code> permiten leer y modificar píxeles uno por uno.</p>
+  </section>
+
+  <section id="estilos" class="texto">
+    <h2>Estilos</h2>
+    <table>
+      <thead><tr><th>Propiedad</th><th>Qué controla</th></tr></thead>
+      <tbody>
+        <tr><td><code>fillStyle</code></td><td>Color, degradado o patrón del relleno (<code>'#2a9d8f'</code>, <code>'rgb(…)'</code>, <code>'hsl(…)'</code>…).</td></tr>
+        <tr><td><code>strokeStyle</code></td><td>Color del contorno.</td></tr>
+        <tr><td><code>lineWidth</code>, <code>lineCap</code>, <code>lineJoin</code></td><td>Grosor y forma de los extremos y las uniones de las líneas.</td></tr>
+        <tr><td><code>globalAlpha</code></td><td>Transparencia de todo lo que se dibuje (de 0 a 1).</td></tr>
+        <tr><td><code>shadowBlur</code>, <code>shadowColor</code></td><td>Sombras.</td></tr>
+        <tr><td><code>createLinearGradient()</code>, <code>createRadialGradient()</code></td><td>Crean degradados que se asignan a <code>fillStyle</code> o <code>strokeStyle</code>.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="texto" class="texto">
+    <h2>Texto</h2>
+<pre><code>ctx.font = 'bold 24px sans-serif';
+ctx.textAlign = 'center';        // alineación horizontal
+ctx.textBaseline = 'middle';     // alineación vertical
+ctx.fillText('Hola', 200, 150);  // texto, x, y</code></pre>
+    <p><code>strokeText()</code> dibuja solo el contorno y <code>measureText()</code> devuelve el ancho que ocupará un texto.</p>
+  </section>
+
+  <section id="transformaciones" class="texto">
+    <h2>Estado y transformaciones</h2>
+    <p>Las transformaciones <code>translate(x, y)</code>, <code>rotate(radianes)</code> y <code>scale(sx, sy)</code> cambian el sistema de coordenadas para todo lo que se dibuje después. Como se acumulan, se envuelven entre <code>save()</code> y <code>restore()</code>, que guardan y recuperan el estado completo del contexto (estilos y transformaciones).</p>
+<pre><code>ctx.save();
+ctx.translate(200, 150);    // el origen ahora está en el centro
+ctx.rotate(Math.PI / 4);    // gira 45°
+ctx.fillRect(-40, -40, 80, 80);   // un cuadrado centrado y girado
+ctx.restore();              // todo vuelve a como estaba</code></pre>
+  </section>
+
+  <section id="animacion" class="texto">
+    <h2>Animación</h2>
+    <p>Un canvas no se anima solo: se repite un ciclo de <strong>actualizar → borrar → dibujar</strong>. El navegador ofrece <code>requestAnimationFrame()</code>, que ejecuta una función justo antes de pintar el siguiente cuadro de pantalla (normalmente unas 60 veces por segundo) y se pausa cuando la pestaña no está visible.</p>
+<pre><code>function cuadro() {
+  x += 2;                                      // 1. actualizar
+  ctx.clearRect(0, 0, canvas.width, canvas.height);  // 2. borrar
+  ctx.fillRect(x, 100, 40, 40);                // 3. dibujar
+  requestAnimationFrame(cuadro);               // pedir el siguiente cuadro
+}
+cuadro();</code></pre>
+  </section>
+
+  <section id="eventos" class="texto">
+    <h2>Eventos y posición del mouse</h2>
+    <p>El canvas es un elemento más, así que recibe eventos como <code>mousemove</code> o <code>click</code>. Hay que convertir las coordenadas de la ventana a coordenadas del canvas:</p>
+<pre><code>canvas.addEventListener('mousemove', (e) =&gt; {
+  const caja = canvas.getBoundingClientRect();
+  const x = (e.clientX - caja.left) * (canvas.width / caja.width);
+  const y = (e.clientY - caja.top) * (canvas.height / caja.height);
+});</code></pre>
+    <p>El factor <code>canvas.width / caja.width</code> corrige el caso en que CSS haya cambiado el tamaño visible del canvas.</p>
+  </section>
+
+  <section id="demos">
+    <h2>Pruébalo: demos con canvas nativo</h2>
+    <p class="texto">Estas tres demos usan solo el contexto <code>'2d'</code>, sin librerías. Su código completo está al final de esta página.</p>
+
+    <h3>1. Formas, estilos, degradado y texto</h3>
+    <div class="demo">
+      <canvas id="demo-formas" width="360" height="200" role="img" aria-label="Rectángulo, círculo, triángulo, curva, degradado y texto dibujados con canvas"></canvas>
+      <p class="texto" style="max-width:34ch;margin:0">Usa <code>fillRect</code>, <code>strokeRect</code>, <code>arc</code>, trazados con <code>moveTo</code> / <code>lineTo</code>, <code>quadraticCurveTo</code>, <code>createLinearGradient</code> y <code>fillText</code>.</p>
+    </div>
+
+    <h3>2. Animación con requestAnimationFrame</h3>
+    <div class="demo">
+      <canvas id="demo-animacion" width="360" height="200" role="img" aria-label="Una pelota roja que rebota en el suelo"></canvas>
+      <div>
+        <p class="texto" style="max-width:34ch;margin-top:0">Una pelota con gravedad y rebote. Cada cuadro: actualiza la posición, borra con <code>clearRect</code> y dibuja de nuevo.</p>
+        <button class="boton oscuro" id="demo-pausa" type="button">Pausar</button>
+      </div>
+    </div>
+
+    <h3>3. Transformaciones con save y restore</h3>
+    <div class="demo">
+      <canvas id="demo-transformaciones" width="360" height="200" role="img" aria-label="Seis barras de colores que giran alrededor de un centro"></canvas>
+      <p class="texto" style="max-width:34ch;margin:0">Seis barras giran alrededor del centro: <code>translate</code> mueve el origen y cada barra usa <code>save</code>, <code>rotate</code> y <code>restore</code>.</p>
+    </div>
+  </section>
+
+  <section id="practicas" class="texto">
+    <h2>Buenas prácticas</h2>
+    <ul>
+      <li>Define siempre <code>width</code> y <code>height</code> como atributos y no solo con CSS.</li>
+      <li>En pantallas de alta densidad (retina) el dibujo se ve borroso. Se corrige multiplicando el tamaño interno por <code>window.devicePixelRatio</code> y escalando el contexto.</li>
+      <li>Llama a <code>beginPath()</code> al iniciar cada figura nueva.</li>
+      <li>Usa <code>save()</code> y <code>restore()</code> alrededor de las transformaciones.</li>
+      <li>Agrega <code>role="img"</code> y <code>aria-label</code> (o contenido alternativo) para lectores de pantalla: el contenido de un canvas no es accesible por sí mismo.</li>
+      <li>Para animar, prefiere <code>requestAnimationFrame()</code> a <code>setInterval()</code>.</li>
+    </ul>
+  </section>
+
+  <section id="equivalencias">
+    <h2>Canvas nativo y p5.js</h2>
+    <p class="texto">p5.js crea un <code>&lt;canvas&gt;</code> con <code>createCanvas()</code> y dibuja en su contexto 2D, aunque con un vocabulario más corto. Esta tabla compara ambos mundos:</p>
+    <table>
+      <thead><tr><th>Canvas 2D nativo</th><th>p5.js</th></tr></thead>
+      <tbody>
+        <tr><td><code>canvas.getContext('2d')</code></td><td><code>createCanvas(400, 400)</code></td></tr>
+        <tr><td><code>ctx.fillStyle = 'red'</code></td><td><code>fill('red')</code></td></tr>
+        <tr><td><code>ctx.strokeStyle</code> / <code>ctx.lineWidth</code></td><td><code>stroke()</code> / <code>strokeWeight()</code></td></tr>
+        <tr><td><code>ctx.fillRect(x, y, w, h)</code></td><td><code>rect(x, y, w, h)</code></td></tr>
+        <tr><td><code>beginPath()</code> + <code>arc()</code> + <code>fill()</code></td><td><code>circle(x, y, d)</code> o <code>ellipse(x, y, w, h)</code></td></tr>
+        <tr><td><code>ctx.fillText()</code></td><td><code>text()</code></td></tr>
+        <tr><td><code>ctx.save()</code> / <code>ctx.restore()</code></td><td><code>push()</code> / <code>pop()</code></td></tr>
+        <tr><td><code>translate</code>, <code>rotate</code>, <code>scale</code></td><td><code>translate()</code>, <code>rotate()</code>, <code>scale()</code></td></tr>
+        <tr><td><code>clearRect()</code> + pintar el fondo</td><td><code>background()</code></td></tr>
+        <tr><td>Bucle con <code>requestAnimationFrame()</code></td><td>La función <code>draw()</code></td></tr>
+        <tr><td>Escuchar <code>mousemove</code> y calcular coordenadas</td><td>Variables <code>mouseX</code> y <code>mouseY</code></td></tr>
+      </tbody>
+    </table>
+    <p class="nota texto">Siguiente paso: <a href="p5js.html">Fundamentos de p5.js</a>.</p>
+  </section>
+
+  <details class="codigo">
+    <summary>Ver el código de las demos (js/canvas-demo.js)</summary>
+    <pre><code id="codigo-fuente" data-src="js/canvas-demo.js">Cargando código…</code></pre>
+  </details>
+
+</main>
+<footer class="pie">
+  <p>Proyecto escolar: de Khan Academy a código web nativo · HTML, CSS, JavaScript y <a href="https://p5js.org/" target="_blank" rel="noopener">p5.js</a></p>
+</footer>
+<script src="js/canvas-demo.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
