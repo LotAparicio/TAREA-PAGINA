@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Estrella y Balón</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
+</head>
+<body>
+  <h1>Estrella y Balón</h1>
+  <script>
+    var xEstrella1 = 0;
+    var yEstrella1 = 100;
+
+    var xBalon = 60;
+    var yBalon = 320;
+
+    var xPos = 0;
+    var yPos = 100;
+
+    function setup() {
+      createCanvas(400, 400);
+    }
+
+    function draw() {
+      background(10, 15, 45);
+      
+      fill(255, 242, 0);
+      ellipse(50, 50, 3, 3);
+      ellipse(120, 80, 2, 2);
+      ellipse(200, 40, 4, 4);
+      ellipse(310, 90, 3, 3);
+      ellipse(350, 30, 2, 2);
+      ellipse(280, 150, 3, 3);
+      
+      fill(240, 240, 210);
+      ellipse(350, 60, 50, 50);
+      fill(10, 15, 45);
+      ellipse(355, 55, 45, 45);
+
+      xEstrella1 += 4;
+      yEstrella1 += 2;
+      fill(0, 255, 255);
+      ellipse(25, 355, 40, 40);
+
+      xBalon += 6;
+      yBalon -= 5;
+
+      fill(255, 100, 0);
+      ellipse(xBalon, yBalon, 22, 22);
+      fill(255, 255, 200);
+      ellipse(xBalon, yBalon, 45, 45);
+    }
+  </script>
+</body>
+</html>
