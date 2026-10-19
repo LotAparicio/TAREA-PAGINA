@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>El Sol Que Explota</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
+</head>
+<body>
+  <h1>El Sol Que Explota</h1>
+  <script>
+    function setup() {
+      createCanvas(400, 400);
+      noStroke();
+    }
+
+    var sunSize = 30;
+
+    function draw() {
+      // El hermoso cielo azul
+      background(82, 222, 240);
+
+      sunSize = sunSize + 1;
+
+      // El sol en el horizonte
+      fill(255, 204, 0);
+      ellipse(200, 298, sunSize, sunSize);
+
+      // La tierra bloqueando la mitad del sol
+      fill(76, 168, 67);
+      rect(0, 300, 400, 100);
+    }
+  </script>
+</body>
+</html>

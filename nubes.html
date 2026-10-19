@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Las Nubes</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
+</head>
+<body>
+  <h1>Las Nubes</h1>
+  <script>
+    var leftX = 150;
+    var rightX = 250;
+    var sunRadius = 100;
+
+    function setup() {
+      createCanvas(400, 400);
+      noStroke();
+    }
+
+    function draw() {
+      background(184, 236, 255);
+      
+      leftX -= 1;
+      rightX += 1;
+      sunRadius += 2;
+      
+      fill(255, 170, 0);
+      ellipse(200, 100, sunRadius, sunRadius);
+      
+      // Nubes
+      fill(255, 255, 255);
+      // Nube izquierda
+      ellipse(leftX, 150, 126, 97);
+      ellipse(leftX + 62, 150, 70, 60);
+      ellipse(leftX - 62, 150, 70, 60);
+      
+      // Nube derecha
+      ellipse(rightX, 100, 126, 97);
+      ellipse(rightX + 62, 100, 70, 60);
+      ellipse(rightX - 62, 100, 70, 60);
+    }
+  </script>
+</body>
+</html>
